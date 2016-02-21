@@ -88,3 +88,39 @@ var Controller = Backbone.Router.extend({
 
 var controller = new Controller(); // Создаём контроллер
 Backbone.history.start(); // Запускаем HTML5 History push
+
+
+
+
+var app = app || {};
+$(function(){
+    app.Myobject = Backbone.Model.extend({
+        defaults: {
+            gender: "man"
+        },
+        initialize: function(){
+            console.log('obj created');
+            this.on('change', function(){
+                console.log('obj changed');
+                var json = app.Myobject.toJSON();
+                console.log(json);
+            });
+        },
+        increasesize: function(){
+            app.Myobject.set({
+                size: this.get('size')+100
+            });
+        }
+    });
+    app.Myobject = new app.Myobject({
+        name: "Artem",
+        height: "187",
+        weight: "75",
+        size: 200
+    });
+    app.Myobject.set({
+        height: "200",
+        type:"active"
+    });
+    console.log(app.Myobject.get('name'));
+});
