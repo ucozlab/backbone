@@ -1,62 +1,52 @@
-//1 view
-var AppState = {
-    username: ""
-};
-var Family = ["Саша", "Юля", "Елизар"];
-var Views = {};
+var AppState = Backbone.Model.extend({
+    defaults: {
+        username: "",
+        state: "start"
+    }
+});
 
-var Start = Backbone.View.extend({
+var appState = new AppState();
+
+var Family = ["Саша", "Юля", "Елизар"];
+
+var Block = Backbone.View.extend({
+
+    templates: { // Шаблоны на разное состояние
+        "start": _.template($('#start').html()),
+        "success": _.template($('#success').html()),
+        "error": _.template($('#error').html())
+    },
     el: $("#block"), // DOM элемент widget'а
 
-    template: _.template($('#start').html()),
+    initialize: function () { // Подписка на событие модели
+        this.model.bind('change', this.render, this);
+    },
 
     events: {
         "click input:button": "check" // Обработчик клика на кнопке "Проверить"
     },
-
     check: function () {
-        var temp = this.el;
-        AppState.username = $(temp).find("input:text").val(); // Сохранение имени пользователя
-        if (_.detect(Family, function(elem){ return elem == AppState.username; })){ // Проверка имени пользователя
-            controller.navigate("success", true); // переход на страницу success
-        } else {
-            controller.navigate("error", true); // переход на страницу error
-        };
+        var username = $(this.el).find("input:text").val();
+        var find = (_.detect(Family, function (elem) {
+            return elem == username
+        })); // Проверка имени пользователя
+        appState.set({ // Сохранение имени пользователя и состояния
+            "state": find ? "success" : "error",
+            "username": username
+        });
     },
-
     render: function () {
-        var temp = this.el;
-        $(temp).html(this.template());
+        var state = this.model.get("state");
+        $(this.el).html(this.templates[state](this.model.toJSON()));
+        return this;
     }
 });
 
-var Success = Backbone.View.extend({
-    el: $("#block"), // DOM элемент widget'а
-
-    template: _.template($('#success').html()),
-
-    render: function () {
-        var temp = this.el;
-        $(temp).html(this.template(AppState));
-    }
+var block = new Block({
+    model: appState
 });
+appState.trigger("change");
 
-var Error = Backbone.View.extend({
-    el: $("#block"), // DOM элемент widget'а
-
-    template: _.template($('#error').html()),
-
-    render: function () {
-        var temp = this.el;
-        $(temp).html(this.template(AppState));
-    }
-});
-
-Views = {
-    start: new Start(),
-    success: new Success(),
-    error: new Error()
-};
 
 //2 controller
 
@@ -66,83 +56,33 @@ var Controller = Backbone.Router.extend({
         "success": "success", // Блок удачи
         "error": "error" // Блок ошибки
     },
-
     start: function () {
-        if (Views.start != null) {
-            Views.start.render();
-        }
+        appState.set({
+            state: "start"
+        });
     },
-
     success: function () {
-        if (Views.success != null) {
-            Views.success.render();
-        }
+        appState.set({
+            state: "success"
+        });
     },
-
     error: function () {
-        if (Views.error != null) {
-            Views.error.render();
-        }
+        appState.set({
+            state: "error"
+        });
     }
 });
 
 var controller = new Controller(); // Создаём контроллер
+
+appState.bind("change:state", function () { // подписка на смену состояния для контроллера
+    var state = this.get("state");
+    if (state == "start") {
+        controller.navigate("", false); // false потому, что нам не надо
+    // вызывать обработчик у Router
+    } else {
+        controller.navigate("" + state, false);
+    }
+});
+
 Backbone.history.start(); // Запускаем HTML5 History push
-
-
-
-
-// model test
-
-var app = app || {};
-$(function(){
-    app.Myobject = Backbone.Model.extend({
-        defaults: {
-            gender: "man"
-        },
-        initialize: function(){
-            console.log('obj created');
-            this.on('change', function(){
-                console.log('obj changed');
-                var json = app.Myobject.changedAttributes();
-                console.log(json);
-            });
-        },
-        increasesize: function(){
-            app.Myobject.set({
-                size: this.get('size')+100
-            }, {
-                validate: true
-            });
-        },
-        validate: function(attrs){
-            if(attrs.size > 500){
-                console.log('incorrect size');
-                return 'cant validate! the size is too big';
-            }
-        }
-    });
-    app.Myobject = new app.Myobject({
-        name: "Artem",
-        height: "187",
-        weight: "75",
-        size: 200
-    });
-    app.Myobject.set({
-        height: "200",
-        type: "active"
-    });
-    console.log(app.Myobject.get('name'));
-});
-
-
-//template test
-$(function(){
-    var compiled = _.template($('#secure').html());
-    var obj = {
-        login: "Ace",
-        password: "ptu827",
-        nice: true
-    };
-    $('#block').append(compiled(obj));
-});
