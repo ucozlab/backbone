@@ -1,52 +1,54 @@
-//1
-var Controller = Backbone.Router.extend({
-    routes: {
-        "": "start", // Пустой hash-тэг
-        "!/": "start", // Начальная страница
-        "!/success": "success", // Блок удачи
-        "!/error": "error" // Блок ошибки
-    },
+// model test
 
-    start: function () {
-        "use strict";
-        $(".block").hide(); // Прячем все блоки
-        $("#start").show(); // Показываем нужный
-    },
-
-    success: function () {
-        "use strict";
-        $(".block").hide();
-        $("#success").show();
-    },
-
-    error: function () {
-        "use strict";
-        $(".block").hide();
-        $("#error").show();
-    }
-});
-
-var controller = new Controller(); // Создаём контроллер
-
-Backbone.history.start(); // Запускаем HTML5 History push
-
-//2
-var Start = Backbone.View.extend({
-    el: $("#start"), // DOM элемент widget'а
-    events: {
-        "click input:button": "check" // Обработчик клика на кнопке "Проверить"
-    },
-    check: function () {
-        "use strict";
-        var temp = this.el;
-        if ($(temp).find("input:text").val() === "test") { // Проверка текста
-            console.log('true');
-            controller.navigate("success", true); // переход на страницу success
-        } else {
-            console.log('false');
-            controller.navigate("error", true); // переход на страницу error
+var app = app || {};
+$(function(){
+    app.Myobject = Backbone.Model.extend({
+        defaults: {
+            gender: "man"
+        },
+        initialize: function(){
+            console.log('obj created');
+            this.on('change', function(){
+                console.log('obj changed');
+                var json = app.Myobject.changedAttributes();
+                console.log(json);
+            });
+        },
+        increasesize: function(){
+            app.Myobject.set({
+                size: this.get('size')+100
+            }, {
+                validate: true
+            });
+        },
+        validate: function(attrs){
+            if(attrs.size > 500){
+                console.log('incorrect size');
+                return 'cant validate! the size is too big';
+            }
         }
-    }
+    });
+    app.Myobject = new app.Myobject({
+        name: "Artem",
+        height: "187",
+        weight: "75",
+        size: 200
+    });
+    app.Myobject.set({
+        height: "200",
+        type: "active"
+    });
+    console.log(app.Myobject.get('name'));
 });
 
-var start = new Start();
+
+//template test
+$(function(){
+    var compiled = _.template($('#secure').html());
+    var obj = {
+        login: "Ace",
+        password: "ptu827",
+        nice: true
+    };
+    $('#block').append(compiled(obj));
+});
