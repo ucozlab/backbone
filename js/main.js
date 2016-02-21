@@ -7,7 +7,33 @@ var AppState = Backbone.Model.extend({
 
 var appState = new AppState();
 
-var Family = ["Саша", "Юля", "Елизар"];
+var UserNameModel = Backbone.Model.extend({ // Модель пользователя
+    defaults: {
+        "Name": ""
+    }
+});
+
+var Family = Backbone.Collection.extend({ // Коллекция пользователей
+    model: UserNameModel,
+    checkUser: function (username) { // Проверка пользователя
+        var findResult = this.find(function (user) {
+            return user.get("Name") == username
+        })
+        return findResult != null;
+    },
+});
+
+var MyFamily = new Family([ // Моя семья
+    {
+        Name: "Саша"
+    },
+    {
+        Name: "Юля"
+    },
+    {
+        Name: "Елизар"
+    }
+]);
 
 var Block = Backbone.View.extend({
 
@@ -27,9 +53,7 @@ var Block = Backbone.View.extend({
     },
     check: function () {
         var username = $(this.el).find("input:text").val();
-        var find = (_.detect(Family, function (elem) {
-            return elem == username
-        })); // Проверка имени пользователя
+        var find = MyFamily.checkUser(username); // Проверка имени пользователя
         appState.set({ // Сохранение имени пользователя и состояния
             "state": find ? "success" : "error",
             "username": username
@@ -79,7 +103,7 @@ appState.bind("change:state", function () { // подписка на смену 
     var state = this.get("state");
     if (state == "start") {
         controller.navigate("", false); // false потому, что нам не надо
-    // вызывать обработчик у Router
+        // вызывать обработчик у Router
     } else {
         controller.navigate("" + state, false);
     }
