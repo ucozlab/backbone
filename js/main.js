@@ -92,6 +92,8 @@ Backbone.history.start(); // Запускаем HTML5 History push
 
 
 
+// model test
+
 var app = app || {};
 $(function(){
     app.Myobject = Backbone.Model.extend({
@@ -131,4 +133,16 @@ $(function(){
         type: "active"
     });
     console.log(app.Myobject.get('name'));
+});
+
+
+//template test
+$(function(){
+    var compiled = _.template($('#secure').html());
+    var obj = {
+        login: "Ace",
+        password: "ptu827",
+        nice: true
+    };
+    $('#block').append(compiled(obj));
 });

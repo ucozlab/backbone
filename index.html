@@ -60,6 +60,16 @@
                             <a href="#">Go back</a>
                     </div>
                 </script>
+
+                <!-- Блок test template -->
+                <script type="text/template" id="secure">
+                    <div>login : <%= login %></div>
+                    <div>password : <%= password %></div>
+                    <% if (nice == true) { %>
+                    <div>Nice!</div>
+                    <% } %>
+                </script>
+
             </div>
         </div>
     </div>
