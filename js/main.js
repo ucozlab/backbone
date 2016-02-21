@@ -24,15 +24,9 @@ var Family = Backbone.Collection.extend({ // Коллекция пользова
 });
 
 var MyFamily = new Family([ // Моя семья
-    {
-        Name: "Саша"
-    },
-    {
-        Name: "Юля"
-    },
-    {
-        Name: "Елизар"
-    }
+    { Name: "Саша" },
+    { Name: "Юля" },
+    { Name: "Елизар" }
 ]);
 
 var Block = Backbone.View.extend({
@@ -76,9 +70,10 @@ appState.trigger("change");
 
 var Controller = Backbone.Router.extend({
     routes: {
-        "": "start", // Начальная страница
-        "success": "success", // Блок удачи
-        "error": "error" // Блок ошибки
+        "": "start", // Пустой hash-тэг
+        "!/": "start", // Начальная страница
+        "!/success": "success", // Блок удачи
+        "!/error": "error" // Блок ошибки
     },
     start: function () {
         appState.set({
@@ -102,10 +97,10 @@ var controller = new Controller(); // Создаём контроллер
 appState.bind("change:state", function () { // подписка на смену состояния для контроллера
     var state = this.get("state");
     if (state == "start") {
-        controller.navigate("", false); // false потому, что нам не надо
+        controller.navigate("!/", false); // false потому, что нам не надо
         // вызывать обработчик у Router
     } else {
-        controller.navigate("" + state, false);
+        controller.navigate("!/" + state, false);
     }
 });
 
