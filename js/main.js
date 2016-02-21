@@ -17,12 +17,11 @@ var Start = Backbone.View.extend({
     check: function () {
         var temp = this.el;
         AppState.username = $(temp).find("input:text").val(); // Сохранение имени пользователя
-
-        if (AppState.username == "test") {// Проверка имени пользователя
+        if (_.detect(Family, function(elem){ return elem == AppState.username; })){ // Проверка имени пользователя
             controller.navigate("success", true); // переход на страницу success
         } else {
             controller.navigate("error", true); // переход на страницу error
-        }
+        };
     },
 
     render: function () {
