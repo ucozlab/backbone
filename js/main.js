@@ -102,14 +102,22 @@ $(function(){
             console.log('obj created');
             this.on('change', function(){
                 console.log('obj changed');
-                var json = app.Myobject.toJSON();
+                var json = app.Myobject.changedAttributes();
                 console.log(json);
             });
         },
         increasesize: function(){
             app.Myobject.set({
                 size: this.get('size')+100
+            }, {
+                validate: true
             });
+        },
+        validate: function(attrs){
+            if(attrs.size > 500){
+                console.log('incorrect size');
+                return 'cant validate! the size is too big';
+            }
         }
     });
     app.Myobject = new app.Myobject({
@@ -120,7 +128,7 @@ $(function(){
     });
     app.Myobject.set({
         height: "200",
-        type:"active"
+        type: "active"
     });
     console.log(app.Myobject.get('name'));
 });
