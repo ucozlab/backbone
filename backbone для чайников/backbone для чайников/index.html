@@ -3,7 +3,7 @@
     <head>
         <title></title>
         <link type="text/css" rel="stylesheet" href="css/style.css" />
-        <script type="text/javascript" src="js/jquery.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="js/underscore.js"></script>
         <script type="text/javascript" src="js/backbone.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
@@ -12,31 +12,31 @@
         <div id="block" class="block">
         </div>
 
-        <!-- Блок ввода имени пользователя -->
+        <!-- пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ -->
         <script type="text/template" id="start"> 
             <div class="start"> 
                 <div class="userplace">
-                    <label for="username">Имя пользователя: </label>
+                    <label for="username">пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: </label>
                     <input type="text" id="username" />
                 </div>
                 <div class="buttonplace">
-                    <input type="button" value="Проверить" />
+                    <input type="button" value="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" />
                 </div>
             </div>
         </script>
 
-        <!-- Блок ошибки -->
+        <!-- пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ -->
         <script type="text/template" id="error">
             <div class="error">
-                Ошибка. Пользователь  <%= username %> не найден.
+                пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  <%= username %> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
                 <a href="#!/">Go back</a>
             </div>
         </script>
 
-        <!-- Блок удачи -->
+        <!-- пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ -->
         <script type="text/template" id="success">
             <div class="success">
-                Пользователь <%= username %> найден.
+                пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ <%= username %> пїЅпїЅпїЅпїЅпїЅпїЅ.
                 <a href="#!/">Go back</a>
             </div>        
         </script>
